@@ -20,6 +20,26 @@ class HandChecker
         return true;
     }
 
+    public function isStraight(Hand $hand)
+    {
+        $numbersFound = array();
+        foreach ($hand->getCards() as $card) {
+            $cardNumber                = $card->getNumber();
+            $numbersFound[$cardNumber] = $cardNumber;
+        }
+        $max = max($numbersFound);
+        $min = min($numbersFound);
+        if ($max == ($min + 5)) {
+            return true;
+        } else {
+            if ($min == 0) {
+                unset($numbersFound[0]);
 
+                return (($max == 13) && min($numbersFound) == 9);
+            }
+        }
+
+        return false;
+    }
 
 }
