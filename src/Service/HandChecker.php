@@ -22,13 +22,9 @@ class HandChecker
 
     public function isStraight(Hand $hand)
     {
-        $numbersFound = array();
-        foreach ($hand->getCards() as $card) {
-            $cardNumber                = $card->getNumber();
-            $numbersFound[$cardNumber] = $cardNumber;
-        }
-        $max = max($numbersFound);
-        $min = min($numbersFound);
+        $numbersFound = $this->getHandNumbers($hand);
+        $max          = max($numbersFound);
+        $min          = min($numbersFound);
         if ($max == ($min + 5)) {
             return true;
         } else {
@@ -40,6 +36,22 @@ class HandChecker
         }
 
         return false;
+    }
+
+    public function isRoyalFlush(Hand $hand)
+    {
+        return $this->isStraight($hand) && $this->isFlush($hand) && max($this->getHandNumbers($hand) == 13);
+    }
+
+    protected function getHandNumbers(Hand $hand)
+    {
+        $numbersFound = array();
+        foreach ($hand->getCards() as $card) {
+            $cardNumber                = $card->getNumber();
+            $numbersFound[$cardNumber] = $cardNumber;
+        }
+
+        return $numbersFound;
     }
 
 }
