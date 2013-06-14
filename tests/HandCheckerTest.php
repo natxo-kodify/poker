@@ -116,7 +116,57 @@ class HandCheckerTest extends PHPUnit_Framework_TestCase
         }
     }
 
+    public function testFourOfAKindOK()
+    {
+        for ($i = 0; $i < 4; ++$i) {
+            for ($j = 0; $j < 13; ++$j) {
+                for ($k = 0; $k < 13; $k) {
+                    if ($k == $j) {
+                        break;
+                    }
+                    $different = new Card($k, $i);
+                    $hand      = new Hand(
+                        $different,
+                        new Card($j, 0),
+                        new Card($j, 1),
+                        new Card($j, 2),
+                        new Card($j, 3)
+                    );
+                    $this->assertTrue($this->checker->isFourOfAKind($hand));
+                }
+            }
+        }
+    }
 
+    public function testFourOfAKindNotOk()
+    {
+        for ($i = 0; $i < 4; ++$i) {
+            for ($j = 0; $j < 13; ++$j) {
+                for ($k = 0; $k < 13; $k) {
+                    if ($k == $j) {
+                        break;
+                    }
+                    $different   = new Card($k, $i);
+                    $handArray   = $this->getSameNumberCardsArray($k, 4);
+                    $handArray[] = $different;
+                    $hand        = new Hand($handArray);
+                    $this->assertFalse($this->checker->isFourOfAKind($hand));
+                }
+            }
+        }
+    }
+
+    protected function getSameNumberCardsArray($number, $times)
+    {
+        $cardsArray = array();
+        $starting   = rand(0, 3);
+        $end        = $times + $starting;
+        for ($i = $starting; $i < $end; ++$i) {
+            $cardsArray[] = new Card($number, ($i % 4));
+        }
+
+        return $cardsArray;
+    }
 
     protected function changeLastElementSuit($handArray)
     {
