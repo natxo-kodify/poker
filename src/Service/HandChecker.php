@@ -43,6 +43,29 @@ class HandChecker
         return $this->isStraight($hand) && $this->isFlush($hand) && max($this->getHandNumbers($hand) == 13);
     }
 
+    public function isFourOfAKind(Hand $hand)
+    {
+        $numbersCount = $this->getHandNumbersCount($hand);
+
+        return max($numbersCount) == 4;
+    }
+
+
+    protected function getHandNumbersCount(Hand $hand)
+    {
+        $numbersCount = array();
+        foreach ($hand->getCards() as $card) {
+            $cardNumber = $card->getNumber();
+            if (!isset($numbersCount[$cardNumber])) {
+                $numbersCount[$cardNumber] = 1;
+            } else {
+                $numbersCount[$cardNumber]++;
+            }
+        }
+
+        return $numbersCount;
+    }
+
     protected function getHandNumbers(Hand $hand)
     {
         $numbersFound = array();
